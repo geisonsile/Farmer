@@ -7,6 +7,7 @@ TagManager:
   - Sensor
   - Soil
   - SellBox
+  - Ground
   layers:
   - Default
   - TransparentFX
