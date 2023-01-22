@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour 
 {
-
-    // Public Properties
+    [Header("Movement")]
     public float movementSpeed = 10;
+    public float maxSpeed = 10;
+    [HideInInspector] public Vector2 movementVector;
+    [HideInInspector] public bool isGrounded;
+
+    [Header("Jump")]
     public float jumpPower = 10;
     public float jumpMovementFactor = 1f;
+    [HideInInspector] public bool hasJumpInput;
 
     // State Machine
     [HideInInspector] public StateMachine stateMachine;
@@ -16,13 +21,11 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public Walking walkingState;
     [HideInInspector] public Jump jumpState;
 
-    // Internal Properties
-    [HideInInspector] public Vector2 movementVector;
-    [HideInInspector] public bool hasJumpInput;
-    [HideInInspector] public bool isGrounded;
+    // Components
     [HideInInspector] public Rigidbody thisRigidbody;
     [HideInInspector] public Collider thisCollider;
     [HideInInspector] public Animator thisAnimator;
+
 
     void Awake() 
     {
@@ -30,8 +33,7 @@ public class PlayerController : MonoBehaviour
         thisCollider = GetComponent<Collider>();
         thisAnimator = GetComponent<Animator>();
     }
-
-    // Start is called before the first frame update
+    
     void Start() 
     {
         // StateMachine and its states
@@ -46,19 +48,14 @@ public class PlayerController : MonoBehaviour
     void Update() 
     {
         CheckInput();
-
         Move();
-
-        // Detect ground
         DetectGround();
 
-        // StateMachine
         stateMachine.Update();
     }
 
     void CheckInput()
     {
-        // Create input vector
         bool isUp = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow);
         bool isDown = Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow);
         bool isLeft = Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow);
@@ -72,20 +69,25 @@ public class PlayerController : MonoBehaviour
 
     void Move()
     {
-        // Update Animator
         float velocity = thisRigidbody.velocity.magnitude;
         float velocityRate = velocity / movementSpeed;
         thisAnimator.SetFloat("fVelocity", velocityRate);
     }
 
-    void LateUpdate() 
+    /*void LateUpdate() 
     {
-        // StateMachine
         stateMachine.LateUpdate();
-    }
+    }*/
 
     void FixedUpdate() 
     {
+        // Apply gravity
+        Vector3 gravityForce = Physics.gravity; //* (isOnSlope ? 0.25f : 1f);
+        thisRigidbody.AddForce(gravityForce, ForceMode.Acceleration);
+
+        // Limit speed
+        LimitSpeed();
+
         // StateMachine
         stateMachine.FixedUpdate();
     }
@@ -137,6 +139,16 @@ public class PlayerController : MonoBehaviour
         return hitObject.CompareTag("Ground") || 
                hitObject.CompareTag("Soil") || 
                hitObject.CompareTag("Sensor");
+    }
+
+    private void LimitSpeed()
+    {
+        Vector3 flatVelocity = new Vector3(thisRigidbody.velocity.x, 0, thisRigidbody.velocity.z);
+        if (flatVelocity.magnitude > maxSpeed)
+        {
+            Vector3 limitedVelocity = flatVelocity.normalized * maxSpeed;
+            thisRigidbody.velocity = new Vector3(limitedVelocity.x, thisRigidbody.velocity.y, limitedVelocity.z);
+        }
     }
 
 }
