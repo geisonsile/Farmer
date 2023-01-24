@@ -5,8 +5,11 @@ public class PlayerCheck : MonoBehaviour {
     public float itemOffset = 2;
     
     private GameObject holdingObject;
-        
-    
+
+    [SerializeField] AudioClip pickSeedsSFX, pickUpWateringCanSFX;
+
+
+
     void Start() {
         
     }
@@ -23,14 +26,14 @@ public class PlayerCheck : MonoBehaviour {
 
         // Sensor
         if(otherObject.CompareTag("Sensor")) {
-            var sensorScript = otherObject.GetComponent<SensorScript>();
+            var sensorScript = otherObject.GetComponent<Sensor>();
             var index = sensorScript.itemIndex;
             UpdateIndex(index);
         }
 
         // Soil
         if(otherObject.CompareTag("Soil")) {
-            var soilScript = otherObject.GetComponent<SoilScript>();
+            var soilScript = otherObject.GetComponent<Soil>();
 
             // With watering can
             if(itemIndex == 3) {

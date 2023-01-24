@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SoilScript : MonoBehaviour
+public class Soil : MonoBehaviour
 {
     public bool isWet;
     public float timeToDry = 120;
@@ -20,6 +20,8 @@ public class SoilScript : MonoBehaviour
     private float growInterval = 1;
     private float growCooldown = 0;
     private float growChance = 0.025f;
+
+    [SerializeField] AudioClip plantingSeedsSFX, wateringPlantsSFX, croopSFX;
 
     void Awake() {
         thisMeshRenderer = GetComponent<MeshRenderer>();
@@ -84,6 +86,7 @@ public class SoilScript : MonoBehaviour
     public void Water() {
         isWet = true;
         dryCooldown = timeToDry;
+        AudioSource.PlayClipAtPoint(wateringPlantsSFX, Camera.main.transform.position);
     }
 
     public bool IsEmpty() {
@@ -100,9 +103,11 @@ public class SoilScript : MonoBehaviour
         // Set vars
         seedIndex = index;
         cropStage = 1;
+        AudioSource.PlayClipAtPoint(plantingSeedsSFX, Camera.main.transform.position);
     }
 
     public void RemoveCrop() {
         cropStage = 0;
+        AudioSource.PlayClipAtPoint(croopSFX, Camera.main.transform.position);
     }
 }
