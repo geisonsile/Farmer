@@ -14,6 +14,6 @@ Projeto pessoal onde o jogador administra uma pequena fazenda, cultivando divers
 
 <p align="middle">
   <p>
-    <img src="Assets/Images/Screenshots/jogo.jpg" width="80%" />
+    <img src="Assets/Images/Screenshots/Jogo.jpg" width="80%" />
   </p>
 </p>
