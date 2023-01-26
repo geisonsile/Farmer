@@ -1,69 +1,80 @@
 using UnityEngine;
 
-public class PlayerCheck : MonoBehaviour {
-    public int itemIndex = 0;
-    public float itemOffset = 2;
+public class PlayerCheck : MonoBehaviour 
+{
+    public EnumSensor itemIndex = EnumSensor.EMPTY;
+    public float itemOffset = 3;
     
     private GameObject holdingObject;
 
-    [SerializeField] AudioClip pickSeedsSFX, pickUpWateringCanSFX;
-
-
-
-    void Start() {
+    
+    void Start() 
+    {
         
     }
 
-    void Update() {
-        if(holdingObject != null) {
+    void Update() 
+    {
+        if(holdingObject != null) 
+        {
             var newPosition = transform.position + new Vector3(0, itemOffset, 0);
             holdingObject.transform.position = newPosition;
         }
     }
 
-    void OnTriggerEnter(Collider other) {
-        GameObject otherObject = other.gameObject;
+    void OnTriggerEnter(Collider other) 
+    {
+        GameObject objectItem = other.gameObject;
 
         // Sensor
-        if(otherObject.CompareTag("Sensor")) {
-            var sensorScript = otherObject.GetComponent<Sensor>();
-            var index = sensorScript.itemIndex;
-            UpdateIndex(index);
+        if (objectItem.CompareTag("Sensor"))
+        {
+            if (itemIndex != EnumSensor.BEET_FRUIT && itemIndex != EnumSensor.PUMPKIN_FRUIT)
+            {
+                Sensor sensor = objectItem.GetComponent<Sensor>();
+                EnumSensor index = sensor.itemIndex;
+
+                UpdateIndex(index);
+
+                if (itemIndex != EnumSensor.EMPTY)
+                    sensor.PlayPickUpSFX();
+            }
         }
 
         // Soil
-        if(otherObject.CompareTag("Soil")) {
-            var soilScript = otherObject.GetComponent<Soil>();
+        if(objectItem.CompareTag("Soil")) 
+        {
+            Soil soil = objectItem.GetComponent<Soil>();
 
-            // With watering can
-            if(itemIndex == 3) {
-                soilScript.Water();
-            }
-
-            // With seeds
-            if(itemIndex == 1 || itemIndex == 2) {
-                if(soilScript.IsEmpty()) {
-                    soilScript.Seed(itemIndex);
-                }
-            }
-
-            // With air
-            if(itemIndex == 0) {
-                if(soilScript.IsFinished()) {
-                    var seedIndex = soilScript.seedIndex;
-                    soilScript.RemoveCrop();
-                    UpdateIndex(seedIndex + 3);
-                }
+            switch (itemIndex)
+            { 
+                case EnumSensor.WATERING_CAN:
+                    soil.Water();
+                    break;
+                case EnumSensor.SEED_BEET: case EnumSensor.SEED_PUMPKIN:
+                    if (soil.IsEmpty()) soil.Seed(itemIndex);
+                    break;
+                case EnumSensor.EMPTY:
+                    if (soil.IsFinished())
+                    {
+                        EnumSensor seedIndex = soil.seedIndex;
+                        soil.RemoveCrop();
+                        UpdateIndex(seedIndex + 3);
+                    }
+                    break;
             }
         }
     }
 
-    void OnCollisionEnter(Collision other) {
+    void OnCollisionEnter(Collision other) 
+    {
         var otherObject = other.gameObject;
 
         // Sell box
-        if(otherObject.CompareTag("SellBox")) {
-            if(itemIndex == 4 || itemIndex == 5) {
+        if(otherObject.CompareTag("SellBox")) 
+        {
+            if(itemIndex == EnumSensor.BEET_FRUIT || itemIndex == EnumSensor.PUMPKIN_FRUIT) 
+            {
 
                 var gm = GameManager.Instance;
 
@@ -94,18 +105,21 @@ public class PlayerCheck : MonoBehaviour {
         }
     }
 
-    private void UpdateIndex(int index) {
+    private void UpdateIndex(EnumSensor index) 
+    {
         itemIndex = index;
 
         // Destroy previous object
-        if(holdingObject != null) {
+        if(holdingObject != null) 
+        {
             Destroy(holdingObject);
             holdingObject = null;
         }
 
         // Create new object
-        GameObject newObjectPrefab = GameManager.Instance.itemObjects[index];
-        if(newObjectPrefab != null) {
+        GameObject newObjectPrefab = GameManager.Instance.itemObjects[(int) index];
+        if(newObjectPrefab != null) 
+        {
             var position = transform.position;
             var rotation = newObjectPrefab.transform.rotation;
             holdingObject = Instantiate(newObjectPrefab, position, rotation);

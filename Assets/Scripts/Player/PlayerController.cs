@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     public float maxSpeed = 10;
     [HideInInspector] public Vector2 movementVector;
     [HideInInspector] public bool isGrounded;
+    bool isMove = false;
 
     [Header("Jump")]
     public float jumpPower = 10;
@@ -47,11 +48,17 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update() 
     {
+        if (!isMove) { return; }
         CheckInput();
         Move();
         DetectGround();
 
         stateMachine.Update();
+    }
+
+    public void MovePlayer(bool status)
+    {
+        isMove = status;
     }
 
     void CheckInput()
@@ -74,10 +81,10 @@ public class PlayerController : MonoBehaviour
         thisAnimator.SetFloat("fVelocity", velocityRate);
     }
 
-    /*void LateUpdate() 
+    void LateUpdate() 
     {
         stateMachine.LateUpdate();
-    }*/
+    }
 
     void FixedUpdate() 
     {

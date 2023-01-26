@@ -9,7 +9,7 @@ public class Soil : MonoBehaviour
     public Material materialDry;
     public Material materialWet;
 
-    public int seedIndex;
+    public EnumSensor seedIndex;
     private int oldCropStage;
     public int cropStage;
     public GameObject cropObject;
@@ -23,7 +23,8 @@ public class Soil : MonoBehaviour
 
     [SerializeField] AudioClip plantingSeedsSFX, wateringPlantsSFX, croopSFX;
 
-    void Awake() {
+    void Awake()
+    {
         thisMeshRenderer = GetComponent<MeshRenderer>();
     }
 
@@ -34,30 +35,35 @@ public class Soil : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update() {
+    void Update() 
+    {
         // Update material
         thisMeshRenderer.material = isWet ? materialWet : materialDry;
 
         // Dry soil
-        if(isWet) {
+        if(isWet) 
+        {
             dryCooldown -= Time.deltaTime;
-            if(dryCooldown <= 0) {
+            if(dryCooldown <= 0) 
+            {
                 isWet = false;
             }
         }
 
         // Update crops
-        if(oldCropStage != cropStage) {
-
+        if(oldCropStage != cropStage) 
+        {
             // Remove crops
-            if(cropObject != null) {
+            if(cropObject != null) 
+            {
                 Destroy(cropObject);
             }
 
             // Plant crops
-            if(cropStage > 0) {
+            if(cropStage > 0) 
+            {
                 var gm = GameManager.Instance;
-                var prefabs = seedIndex == 1 ? gm.beetPrefabs : gm.pumpkinPrefabs;
+                var prefabs = seedIndex == EnumSensor.SEED_BEET ? gm.beetPrefabs : gm.pumpkinPrefabs;
                 var cropPrefab = prefabs[cropStage - 1];
 
                 var position = transform.position;
@@ -69,11 +75,14 @@ public class Soil : MonoBehaviour
         oldCropStage = cropStage;
 
         // Grow crops
-        if(!IsEmpty() && !IsFinished()) {
-            if((growCooldown -= Time.deltaTime) <= 0) {
+        if(!IsEmpty() && !IsFinished()) 
+        {
+            if((growCooldown -= Time.deltaTime) <= 0) 
+            {
                 growCooldown = growInterval;
                 var realChance = growChance;
-                if(isWet) {
+                if(isWet) 
+                {
                     realChance *= 2f;
                 }
                 if(Random.Range(0f, 1f) < growChance){
@@ -83,13 +92,15 @@ public class Soil : MonoBehaviour
         }
     }
 
-    public void Water() {
+    public void Water()
+    {
         isWet = true;
         dryCooldown = timeToDry;
         AudioSource.PlayClipAtPoint(wateringPlantsSFX, Camera.main.transform.position);
     }
 
-    public bool IsEmpty() {
+    public bool IsEmpty() 
+    {
         return cropStage == 0;
     }
 
@@ -97,17 +108,20 @@ public class Soil : MonoBehaviour
         return cropStage == 5;
     }
 
-    public void Seed(int index) {
+    public void Seed(EnumSensor index) 
+    {
         if(!IsEmpty()) return;
-
-        // Set vars
+        
         seedIndex = index;
         cropStage = 1;
         AudioSource.PlayClipAtPoint(plantingSeedsSFX, Camera.main.transform.position);
     }
 
-    public void RemoveCrop() {
+    public void RemoveCrop() 
+    {
+        seedIndex = EnumSensor.EMPTY;
         cropStage = 0;
+        
         AudioSource.PlayClipAtPoint(croopSFX, Camera.main.transform.position);
     }
 }

@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class Sensor : MonoBehaviour
 {
-    public int itemIndex;
+    public EnumSensor itemIndex;
+    [SerializeField] AudioClip pickUpSFX;
 
-    // Start is called before the first frame update
-    void Start()
+    public void PlayPickUpSFX()
     {
-        
+        AudioSource.PlayClipAtPoint(pickUpSFX, Camera.main.transform.position);
     }
 }
