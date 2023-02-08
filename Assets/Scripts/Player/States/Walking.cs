@@ -30,6 +30,8 @@ public class Walking : State {
             controller.stateMachine.ChangeState(controller.idleState);
             return;
         }
+
+       
     }
 
     public override void LateUpdate() {

@@ -28,6 +28,11 @@ public class Idle : State {
         // Switch to Walking
         if(!controller.movementVector.IsZero()) {
             controller.stateMachine.ChangeState(controller.walkingState);
+            /*if (!controller.isCarry)
+                controller.stateMachine.ChangeState(controller.walkingState);
+            else
+                controller.stateMachine.ChangeState(controller.carryState);*/
+
             return;
         }
     }

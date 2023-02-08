@@ -55,7 +55,7 @@ public class Jump : State {
         }
 
         // Create vector
-        Vector3 walkVector = new Vector3(controller.movementVector.x, 0, controller.movementVector.y);
+        /*Vector3 walkVector = new Vector3(controller.movementVector.x, 0, controller.movementVector.y);
         walkVector = controller.GetForward() * walkVector;
         walkVector *= controller.movementSpeed * controller.jumpMovementFactor;
 
@@ -63,7 +63,7 @@ public class Jump : State {
         controller.thisRigidbody.AddForce(walkVector, ForceMode.Force);
 
         // Rotate character
-        controller.RotateBodyToFaceInput();
+        controller.RotateBodyToFaceInput();*/
     }
 
     private void ApplyImpulse() {

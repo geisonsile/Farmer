@@ -16,16 +16,21 @@ public class PlayerController : MonoBehaviour
     public float jumpMovementFactor = 1f;
     [HideInInspector] public bool hasJumpInput;
 
+    public bool isCarry = false;
+
     // State Machine
     [HideInInspector] public StateMachine stateMachine;
     [HideInInspector] public Idle idleState;
     [HideInInspector] public Walking walkingState;
     [HideInInspector] public Jump jumpState;
+    [HideInInspector] public Carry carryState;
 
     // Components
     [HideInInspector] public Rigidbody thisRigidbody;
     [HideInInspector] public Collider thisCollider;
     [HideInInspector] public Animator thisAnimator;
+
+    public GameObject handCart;
 
 
     void Awake() 
@@ -42,6 +47,8 @@ public class PlayerController : MonoBehaviour
         idleState = new Idle(this);
         walkingState = new Walking(this);
         jumpState = new Jump(this);
+        carryState = new Carry(this);
+
         stateMachine.ChangeState(idleState);
     }
 
@@ -78,7 +85,7 @@ public class PlayerController : MonoBehaviour
     {
         float velocity = thisRigidbody.velocity.magnitude;
         float velocityRate = velocity / movementSpeed;
-        thisAnimator.SetFloat("fVelocity", velocityRate);
+        thisAnimator.SetFloat("fVelocity", velocityRate); 
     }
 
     void LateUpdate() 
@@ -97,6 +104,12 @@ public class PlayerController : MonoBehaviour
 
         // StateMachine
         stateMachine.FixedUpdate();
+
+        /*if (handCart != null)
+        {
+            handCart.transform.position = transform.position + new Vector3(-0.2f, 0.75f, 0.2f) + transform.forward;
+            handCart.transform.rotation = transform.rotation * Quaternion.Euler(-5f, -180f, 0);
+        }*/
     }
 
     public Quaternion GetForward() 

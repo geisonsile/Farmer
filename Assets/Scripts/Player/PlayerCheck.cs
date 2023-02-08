@@ -7,10 +7,11 @@ public class PlayerCheck : MonoBehaviour
     
     private GameObject holdingObject;
 
+    private PlayerController playerController;
     
     void Start() 
     {
-        
+        playerController = GetComponent<PlayerController>();
     }
 
     void Update() 
@@ -35,9 +36,16 @@ public class PlayerCheck : MonoBehaviour
                 EnumSensor index = sensor.itemIndex;
 
                 UpdateIndex(index);
-
+                
                 if (itemIndex != EnumSensor.EMPTY)
+                {
+                    playerController.isCarry = true;
                     sensor.PlayPickUpSFX();
+                }
+                else
+                {
+                    playerController.isCarry = false;
+                }
             }
         }
 
@@ -94,13 +102,23 @@ public class PlayerCheck : MonoBehaviour
                 if(fruitRigidbody != null) {
                     fruitRigidbody.useGravity = true;
                 }
+                
+                // Give money
+                //gm.coins += gm.coinsPerFruit;
+                //Debug.Log("Player coins: " + gm.coins);
+                if (itemIndex == EnumSensor.BEET_FRUIT)
+                {
+                    gm.qtdBeets++;
+                    gm.txtBeetsQtd.text = gm.qtdBeets.ToString();
+                }
+                else if(itemIndex == EnumSensor.PUMPKIN_FRUIT)
+                {
+                    gm.qtdPumpkins++;
+                    gm.txtPumpkinsQtd.text = gm.qtdPumpkins.ToString();
+                }
 
                 // Reset index
                 UpdateIndex(0);
-
-                // Give money
-                gm.coins += gm.coinsPerFruit;
-                Debug.Log("Player coins: " + gm.coins);
             }
         }
     }

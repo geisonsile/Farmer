@@ -1,5 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
@@ -8,6 +8,11 @@ public class GameManager : MonoBehaviour {
 
     public int coins;
     public int coinsPerFruit = 5;
+
+    public int qtdPumpkins;
+    public int qtdBeets;
+    public TextMeshProUGUI txtPumpkinsQtd;
+    public TextMeshProUGUI txtBeetsQtd;
 
     public Transform depositBoxTransform;
 
