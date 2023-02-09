@@ -8,6 +8,8 @@ public class PlayerCheck : MonoBehaviour
     private GameObject holdingObject;
 
     private PlayerController playerController;
+    public FinishGame finishGame;
+
     
     void Start() 
     {
@@ -81,45 +83,50 @@ public class PlayerCheck : MonoBehaviour
         // Sell box
         if(otherObject.CompareTag("SellBox")) 
         {
-            if(itemIndex == EnumSensor.BEET_FRUIT || itemIndex == EnumSensor.PUMPKIN_FRUIT) 
+            if(itemIndex == EnumSensor.BEET_FRUIT || itemIndex == EnumSensor.PUMPKIN_FRUIT)
             {
 
-                var gm = GameManager.Instance;
+                var gm = GameManager.instance;
 
                 // Teleport fruit
                 var fruitObject = holdingObject;
                 holdingObject = null;
                 var offset = new Vector3(
-                    Random.Range(-1f,1f),
-                    Random.Range(-1f,1f),
-                    Random.Range(-1f,1f)
+                    Random.Range(-1f, 1f),
+                    Random.Range(-1f, 1f),
+                    Random.Range(-1f, 1f)
                 );
-                var destination = gm.depositBoxTransform.position + offset;
+                var destination = gm.positionItensTransform.position + offset;
                 fruitObject.transform.position = destination;
 
                 // Enable gravity
                 var fruitRigidbody = fruitObject.GetComponent<Rigidbody>();
-                if(fruitRigidbody != null) {
+                if (fruitRigidbody != null)
+                {
                     fruitRigidbody.useGravity = true;
                 }
-                
-                // Give money
-                //gm.coins += gm.coinsPerFruit;
-                //Debug.Log("Player coins: " + gm.coins);
-                if (itemIndex == EnumSensor.BEET_FRUIT)
-                {
-                    gm.qtdBeets++;
-                    gm.txtBeetsQtd.text = gm.qtdBeets.ToString();
-                }
-                else if(itemIndex == EnumSensor.PUMPKIN_FRUIT)
-                {
-                    gm.qtdPumpkins++;
-                    gm.txtPumpkinsQtd.text = gm.qtdPumpkins.ToString();
-                }
+
+                SetPoints(gm);
+
+                finishGame.CheckFinish(playerController);
 
                 // Reset index
                 UpdateIndex(0);
             }
+        }
+    }
+
+    private void SetPoints(GameManager gm)
+    {
+        if (itemIndex == EnumSensor.BEET_FRUIT)
+        {
+            gm.qtdBeets++;
+            gm.txtBeetsQtd.text = string.Format("{0}/{1}", gm.qtdBeets.ToString(), gm.totalItens);
+        }
+        else if (itemIndex == EnumSensor.PUMPKIN_FRUIT)
+        {
+            gm.qtdPumpkins++;
+            gm.txtPumpkinsQtd.text = string.Format("{0}/{1}", gm.qtdPumpkins.ToString(), gm.totalItens);
         }
     }
 
@@ -135,7 +142,7 @@ public class PlayerCheck : MonoBehaviour
         }
 
         // Create new object
-        GameObject newObjectPrefab = GameManager.Instance.itemObjects[(int) index];
+        GameObject newObjectPrefab = GameManager.instance.itemObjects[(int) index];
         if(newObjectPrefab != null) 
         {
             var position = transform.position;
@@ -143,5 +150,4 @@ public class PlayerCheck : MonoBehaviour
             holdingObject = Instantiate(newObjectPrefab, position, rotation);
         }
     }
-
 }

@@ -62,7 +62,7 @@ public class Soil : MonoBehaviour
             // Plant crops
             if(cropStage > 0) 
             {
-                var gm = GameManager.Instance;
+                var gm = GameManager.instance;
                 var prefabs = seedIndex == EnumSensor.SEED_BEET ? gm.beetPrefabs : gm.pumpkinPrefabs;
                 var cropPrefab = prefabs[cropStage - 1];
 

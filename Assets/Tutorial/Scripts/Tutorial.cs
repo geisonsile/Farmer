@@ -19,7 +19,7 @@ public class Tutorial : MonoBehaviour
     private void Start()
     {
         /*! Verifica se o tutorial deve ser exibido */
-        if (GameManager.Instance.tutorialShow)
+        if (GameManager.instance.tutorialShow)
         {
             for (int i = 1; i < lstTutorialSteps.Count; i++)
             {
@@ -96,7 +96,8 @@ public class Tutorial : MonoBehaviour
     /*! Usado pelos botões Pular e Começar */
     public void Close()
     {
-        panelItens.SetActive(false); 
+        panelItens.SetActive(false);
+        GameManager.instance.tutorialShow = false;
         StartGame.Invoke();
     }
    

@@ -2,19 +2,18 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : MonoBehaviour 
+{
 
-    public static GameManager Instance;
+    public static GameManager instance;
 
-    public int coins;
-    public int coinsPerFruit = 5;
-
+    public int totalItens = 5;
     public int qtdPumpkins;
     public int qtdBeets;
     public TextMeshProUGUI txtPumpkinsQtd;
     public TextMeshProUGUI txtBeetsQtd;
 
-    public Transform depositBoxTransform;
+    public Transform positionItensTransform;
 
     public List<string> items;
     public List<GameObject> itemObjects;
@@ -24,8 +23,17 @@ public class GameManager : MonoBehaviour {
 
     public bool tutorialShow = true;
 
-    void Awake() {
-        Instance = this;
+    void Awake() 
+    {
+        if (instance != null)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
     }
     
     void Start()
