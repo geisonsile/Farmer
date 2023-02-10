@@ -6,8 +6,11 @@ TagManager:
   tags:
   - Sensor
   - Soil
-  - SellBox
+  - Sell
   - Ground
+  - PumpkinQtd
+  - BeetQtd
+  - PositionItem
   layers:
   - Default
   - TransparentFX

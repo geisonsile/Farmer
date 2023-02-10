@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour 
@@ -30,8 +28,6 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public Collider thisCollider;
     [HideInInspector] public Animator thisAnimator;
 
-    public GameObject handCart;
-
 
     void Awake() 
     {
@@ -51,8 +47,7 @@ public class PlayerController : MonoBehaviour
 
         stateMachine.ChangeState(idleState);
     }
-
-    // Update is called once per frame
+    
     void Update() 
     {
         if (!isMove) { return; }
@@ -104,12 +99,6 @@ public class PlayerController : MonoBehaviour
 
         // StateMachine
         stateMachine.FixedUpdate();
-
-        /*if (handCart != null)
-        {
-            handCart.transform.position = transform.position + new Vector3(-0.2f, 0.75f, 0.2f) + transform.forward;
-            handCart.transform.rotation = transform.rotation * Quaternion.Euler(-5f, -180f, 0);
-        }*/
     }
 
     public Quaternion GetForward() 

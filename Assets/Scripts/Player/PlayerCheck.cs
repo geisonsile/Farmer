@@ -10,7 +10,7 @@ public class PlayerCheck : MonoBehaviour
     private PlayerController playerController;
     public FinishGame finishGame;
 
-    
+
     void Start() 
     {
         playerController = GetComponent<PlayerController>();
@@ -81,22 +81,17 @@ public class PlayerCheck : MonoBehaviour
         var otherObject = other.gameObject;
 
         // Sell box
-        if(otherObject.CompareTag("SellBox")) 
+        if(otherObject.CompareTag("Sell")) 
         {
             if(itemIndex == EnumSensor.BEET_FRUIT || itemIndex == EnumSensor.PUMPKIN_FRUIT)
             {
-
                 var gm = GameManager.instance;
 
                 // Teleport fruit
                 var fruitObject = holdingObject;
                 holdingObject = null;
-                var offset = new Vector3(
-                    Random.Range(-1f, 1f),
-                    Random.Range(-1f, 1f),
-                    Random.Range(-1f, 1f)
-                );
-                var destination = gm.positionItensTransform.position + offset;
+                
+                var destination = gm.GetPositionItens();
                 fruitObject.transform.position = destination;
 
                 // Enable gravity
@@ -106,30 +101,19 @@ public class PlayerCheck : MonoBehaviour
                     fruitRigidbody.useGravity = true;
                 }
 
-                SetPoints(gm);
+                gm.SetScore(itemIndex, 1);
 
-                finishGame.CheckFinish(playerController);
+                if(gm.CheckFinish())
+                {
+                    StartCoroutine(finishGame.ShowPanelEndGame(1f, playerController));
+                }
 
                 // Reset index
                 UpdateIndex(0);
             }
         }
     }
-
-    private void SetPoints(GameManager gm)
-    {
-        if (itemIndex == EnumSensor.BEET_FRUIT)
-        {
-            gm.qtdBeets++;
-            gm.txtBeetsQtd.text = string.Format("{0}/{1}", gm.qtdBeets.ToString(), gm.totalItens);
-        }
-        else if (itemIndex == EnumSensor.PUMPKIN_FRUIT)
-        {
-            gm.qtdPumpkins++;
-            gm.txtPumpkinsQtd.text = string.Format("{0}/{1}", gm.qtdPumpkins.ToString(), gm.totalItens);
-        }
-    }
-
+    
     private void UpdateIndex(EnumSensor index) 
     {
         itemIndex = index;

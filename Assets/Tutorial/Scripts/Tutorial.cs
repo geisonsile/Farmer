@@ -6,20 +6,20 @@ using UnityEngine.Events;
 public class Tutorial : MonoBehaviour
 {
     [SerializeField] GameObject panelItens;
-    [SerializeField] List<GameObject> lstTutorialSteps;  /*!< Lista com todos os passos do tutorial usando o prefab StepTutorial_Sys */
-    [SerializeField] GameObject btnPrevious;           /*!< Botão passo anterior */
-    [SerializeField] GameObject btnNext;              /*!< Botão próximo passo */
-    [SerializeField] GameObject btnStart;             /*!< Botão para começar o jogo */ 
+    [SerializeField] List<GameObject> lstTutorialSteps; //Lista com todos os passos do tutorial usando o prefab StepTutorial_Sys
+    [SerializeField] GameObject btnPrevious;
+    [SerializeField] GameObject btnNext; 
+    [SerializeField] GameObject btnStart;
 
-    int indexStep = 0;              /*!< Índice do passo atual */
+    int indexStep = 0;
 
-    [SerializeField] UnityEvent StartGame; /*!< Evento para chamar por algum script do jogo */
+    [SerializeField] UnityEvent StartGame; //Evento para chamar por algum script do jogo
 
 
     private void Start()
     {
-        /*! Verifica se o tutorial deve ser exibido */
-        if (GameManager.instance.tutorialShow)
+        
+        if (GameSession.instance.tutorialShow)
         {
             for (int i = 1; i < lstTutorialSteps.Count; i++)
             {
@@ -34,8 +34,7 @@ public class Tutorial : MonoBehaviour
             Close();
         }
     }
-
-    /*! Método do botão passo anterior */
+    
     public void PreviousStep()
     {
         if (indexStep > 0)
@@ -45,8 +44,7 @@ public class Tutorial : MonoBehaviour
             ActualStep();
         }
     }
-
-    /*! Método do botão próximo passo */
+     
     public void NextStep()
     {
         if (indexStep < lstTutorialSteps.Count-1)
@@ -56,18 +54,15 @@ public class Tutorial : MonoBehaviour
             ActualStep();
         }
     }
-
-    /*! Ações referentes ao passo atual */
+    
     private void ActualStep()
     {
         lstTutorialSteps[indexStep].SetActive(true);
 
-        //GetComponentInChildren<TextMeshProUGUI>().text = lstStepsTxt[indexStep];
-
         btnPrevious.GetComponentInChildren<TextMeshProUGUI>().text = (indexStep).ToString();
         btnNext.GetComponentInChildren<TextMeshProUGUI>().text = (indexStep + 2).ToString();
 
-        /*! Se o estiver no primeiro passo, não exibe o botão de passo anterior */
+        //Se o estiver no primeiro passo, não exibe o botão de passo anterior
         if (indexStep == 0)
         {
             btnPrevious.GetComponent<RectTransform>().localScale = new Vector2(1,1);
@@ -78,7 +73,7 @@ public class Tutorial : MonoBehaviour
             btnPrevious.SetActive(true);
         }
 
-        /*! Se o estiver no último passo, não exibe o botão de próximo passo e exibe o botão de iniciar o Jogo */
+        //Se o estiver no último passo, não exibe o botão de próximo passo e exibe o botão de iniciar o Jogo
         if (indexStep == lstTutorialSteps.Count - 1)
         {
             btnNext.GetComponent<RectTransform>().localScale = new Vector2(1, 1);
@@ -93,11 +88,11 @@ public class Tutorial : MonoBehaviour
         }
     }
 
-    /*! Usado pelos botões Pular e Começar */
+    //Usado pelos botões Skip e Start
     public void Close()
     {
         panelItens.SetActive(false);
-        GameManager.instance.tutorialShow = false;
+        GameSession.instance.tutorialShow = false;
         StartGame.Invoke();
     }
    

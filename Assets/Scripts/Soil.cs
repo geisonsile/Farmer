@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Soil : MonoBehaviour
@@ -28,13 +26,12 @@ public class Soil : MonoBehaviour
         thisMeshRenderer = GetComponent<MeshRenderer>();
     }
 
-    // Start is called before the first frame update
+    
     void Start()
     {
         dryCooldown = timeToDry;
     }
-
-    // Update is called once per frame
+    
     void Update() 
     {
         // Update material
@@ -62,7 +59,7 @@ public class Soil : MonoBehaviour
             // Plant crops
             if(cropStage > 0) 
             {
-                var gm = GameManager.instance;
+                var gm = FindObjectOfType<GameManager>(); //GameManager.instance;
                 var prefabs = seedIndex == EnumSensor.SEED_BEET ? gm.beetPrefabs : gm.pumpkinPrefabs;
                 var cropPrefab = prefabs[cropStage - 1];
 
