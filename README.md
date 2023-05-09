@@ -8,7 +8,7 @@ Projeto pessoal onde o jogador administra uma pequena fazenda, cultivando divers
 * Animação de movimento do jogador usando Blend Tree para fazer uma transição suave entre parado e andando
 
 # Game
-**Jogue agora em** https://play.unity.com/mg/other/webgl-builds-300765
+**Jogue agora em** https://geisonleite.itch.io/farmer
 
 # Screenshots
 
